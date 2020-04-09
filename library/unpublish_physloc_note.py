@@ -6,7 +6,7 @@ import getpass
 #Script slightly modified from script provided by Duke Libraries, Alicia Detelich, Yale Manuscripts and ArchivesSpace
 
 #Script reads CSV input with following column: archival_object_ref_ID
-#Script removes notes containing acquisition information
+#Script unpublishes physical location notes 
 #Script will write out log of actions to CSV file (updated_notes.csv) including: 
 
 
@@ -56,8 +56,8 @@ def delete_note():
         archival_object_json = requests.get(aspace_url+archival_object_uri,headers=headers).json()
         for note in archival_object_json['notes']:
             index = archival_object_json['notes'].index(note)
-            if note['type'] == 'acqinfo':
-                del archival_object_json['notes'][index]
+            if note['type'] == 'physloc':
+                note['publish'] = False 
                 
         archival_object_data = json.dumps(archival_object_json)
         row = []
